@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    
+
+    <style>
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .products-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 40px;
+        }
+
+        .product {
+            width: 220px;
+            text-align: center;
+            margin: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-15px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
+        }
+        .main-image {
+            max-width: 60%;
+            height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s; /* For smooth transition */
+        }
+
+        /* Hover effect for main image */
+        .main-image:hover {
+            transform: scale(1.05); /* Slightly enlarges the image */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Increases the shadow */
+        }
+
+        .img-box {
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .img-box:hover {
+            transform: scale(1.2); /* Slightly enlarge the SVG */
+            opacity: 0.9; /* Change opacity */
+        }
+        #footer {
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 50px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.5;
+            
+        }
+
+       
+
+    </style>
+
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <header class="header" style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+        <nav>
+            {% if user.is_authenticated %}
+                <span style="color: red; font-size: 1.2em; margin-right: 15px;">Hello, {{ user.username }}</span>
+                <a class="home" href="{% url 'logout' %}?logout=true" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Logout</a>
+                <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+                <a href="{% url 'view_cart'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Cart</a>
+                <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+                <a href="#products-container" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Products</a>
+                <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+            {% else %}
+                <a href="{% url 'login' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Login</a>
+                <a href="#products-container" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Products</a>
+                <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+                
+            {% endif %}
+                
+        </nav>
+    </header>
+
+    <div class="slider" style="position: relative; max-width: 100%; overflow: hidden;">
+        <div class="slider-container" style="display: flex; transition: transform 0.5s;">
+            <img src="{% static 'Images/Image 2.jpg' %}" alt="Brand 1" class="active" style="width: 100%; display: block;">
+            <img src="{% static 'Images/Image 3.jpg' %}" alt="Brand 2" style="width: 100%; display: block;">
+            <img src="{% static 'Images/Image 1.jpg' %}" alt="Brand 3" style="width: 100%; display: block;">
+        </div>
+        <button class="arrow left-arrow" onclick="changeSlide(-1)" style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); background: rgba(255, 255, 255, 0.7); border: none; cursor: pointer; padding: 10px; border-radius: 50%; font-size: 20px;">&#10094;</button>
+        <button class="arrow right-arrow" onclick="changeSlide(1)" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(255, 255, 255, 0.7); border: none; cursor: pointer; padding: 10px; border-radius: 50%; font-size: 20px;">&#10095;</button>
+    </div>
+
+    <section style="text-align: center; padding: 40px 20px;">
+        <a href="#products-container" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Products</a>
+        <h2 style="font-size: 35px;"><b>Welcome to CamFiesta</b></h2>
+        <h3>Capture life's moments with CamFiesta</h3>
+        <p>
+            "Capture the essence of life through the lens. CamFiesta is your partner in this journey, providing the tools and inspiration you need to create breathtaking imagery."
+        </p>
+        <img src="{% static 'Images/main image.jpg' %}" class="main-image" alt="Main Image">
+    </section>
+    <div style="text-align: center; padding: 20px;">
+        <form method="get" action="" style="display: inline-block;">
+            <select id="dropdown" name="category" onchange="this.form.submit()" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="all" {% if not selected_category or selected_category == 'all' %}selected{% endif %}>All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.name }}" {% if selected_category == category.name %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    
+    
+    <section  id="products-container" class="products-container">
+        {% for product in products %}
+            <article class="product">
+                <a href="{% url 'product' product.id %}" style="text-decoration: none;">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <h3 style="text-decoration: none; color: #333; font-weight: bold; ">{{ product.name }}</h3>
+                </a>
+                <p style="color: #ff0000; font-size: 1em;">${{ product.price }}</p>
+            </article>
+        {% empty %}
+            <p>No products available.</p>
+        {% endfor %}
+    </section>
+
+    <section class="why_section layout_padding" style="text-align: center; padding: 60px 30px; background-color: #f7f7f7;">
+        <h2 class="whyh2" style="color: #222; font-size: 2.5em; margin-bottom: 30px;">Why Shop With Us</h2>
+        <div class="row" style="display: flex; justify-content: center; gap: 20px;">
+            <div class="col-md-4" style="flex: 1; max-width: 300px; padding: 0;">
+                <div class="box" style="border: 1px solid #e0e0e0; border-radius: 12px; padding: 25px; background-color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05); transition: transform 0.3s;">
+                    <div class="img-box" style="margin-bottom: 20px;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 12h2.5M5 12v4.5H2V12h3zm16-2v5h-3V8h3v2zM14 5v5H8V5h6zM8 20v-2h6v2h-6zm8-7h2.5m1 0H21v-2h-1.5M10.5 10.5l1.8-1.8m-3.6 0l1.8 1.8M7 15h1m5-7h-3v-2h3v2z" stroke="#5A67D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h5 class="h5why" style="color: #333; font-size: 1.2em; font-weight: bold;">Fast Delivery</h5>
+                </div>
+            </div>
+            
+            <div class="col-md-4" style="flex: 1; max-width: 300px; padding: 0;">
+                <div class="box" style="border: 1px solid #e0e0e0; border-radius: 12px; padding: 25px; background-color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05); transition: transform 0.3s;">
+                    <div class="img-box" style="margin-bottom: 20px;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3a9 9 0 1 0 9 9 9.01 9.01 0 0 0-9-9zm0 13.5a4.5 4.5 0 0 1-4.5-4.5H12V12H7.5a4.5 4.5 0 1 1 4.5 4.5z" stroke="#38B2AC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h5 class="h5why" style="color: #333; font-size: 1.2em; font-weight: bold;">24/7 Support</h5>
+                </div>
+            </div>
+            <div class="col-md-4" style="flex: 1; max-width: 300px; padding: 0;">
+                <div class="box" style="border: 1px solid #e0e0e0; border-radius: 12px; padding: 25px; background-color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05); transition: transform 0.3s;">
+                    <div class="img-box" style="margin-bottom: 20px;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2l3 7 6 .5-5 4.3 2 7L12 17l-6 3.8 2-7L3 9.5l6-.5 3-7z" stroke="#F56565" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h5 class="h5why" style="color: #333; font-size: 1.2em; font-weight: bold;">Quality Assurance</h5>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('logout') && urlParams.get('logout') === 'true') {
+            alert('Logout Successful');
+        }
+    
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slider-container img');
+        const totalSlides = slides.length;
+    
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            document.querySelector('.slider-container').style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+    
+        // Automatically slide every 2 seconds
+        setInterval(() => {
+            changeSlide(1); // Move to the next slide every 2 seconds
+        }, 2500); // 2000 milliseconds = 2 seconds
+    </script>
+    <footer>
+        <p id="footer">All rights are reserved | CamFiesta</p>
+    </footer>
+</body>
+</html>

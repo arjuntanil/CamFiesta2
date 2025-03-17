@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - CamFiesta</title>
+    <style>
+        /* Add your CSS styles here */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Main container */
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        form input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            padding: 12px 20px;
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #555;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Style for products list */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .product-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            width: 200px; /* Adjusted image size */
+            border-radius: 4px;
+        }
+
+        .product-item a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .product-item a:hover {
+            color: #d9534f;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            margin-top: 30px;
+        }
+        /* ... */
+    </style>
+</head>
+<body>
+
+    <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="name1" style="margin: 0; font-size: 2.5em; color: white;"><b>CamFiesta</b></h2>
+        <nav>
+            <span style="color: red; font-size: 1.3em; margin-right: 10px; margin-top: 5px;">Hello, {{ user.username }}</span>
+            
+            <a href="{% url 'home' %}" style="color: white; margin: 0 10px; text-decoration: none; font-size: 1.2em;">Home</a>
+            <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+            <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+            <a href="{% url 'view_cart'%}" style="color: white; margin: 0 10px; text-decoration: none; font-size: 1.2em;">Cart</a>
+        </nav>
+    </header>
+
+    <main>
+        <h3>Search Products</h3>
+
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="query" value="{{ query }}" placeholder="Search products">
+            <button type="submit">Search</button>
+        </form>
+
+        <div>
+            {% if query %}
+                {% if products %}
+                    <h3>Search Results</h3>
+                    <ul class="product-list">
+                        {% for product in products %}
+                        <li class="product-item">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            <a href="{% url 'product' product.id %}">{{ product.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- <h3>Similar Products</h3> -->
+                    <ul class="product-list">
+                        {% for similar_product in similar_products %}
+                        <li class="product-item">
+                            <img src="{{ similar_product.image.url }}" alt="{{ similar_product.name }}">
+                            <a href="{% url 'product' similar_product.id %}">{{ similar_product.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="no-results">No products found for "{{ query }}"</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CamFiesta. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

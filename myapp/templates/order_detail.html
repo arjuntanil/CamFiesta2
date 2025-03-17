@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Body Style */
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px 0;
+        }
+
+        /* Main Container */
+        .container {
+            margin-top: 100px;
+            background: #fff;
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: #000;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width : 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        header .name1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Order Details Section */
+        .basic_details {
+            margin-bottom: 20px;
+         
+            padding-bottom: 15px;
+        }
+
+        .basic_details h2 {
+            color: #333;
+            font-size: 1.8em;
+            
+            font-weight: bold;
+        }
+
+        .order_details {
+            color: #4CAF50;
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+
+        /* Shipping Address Section */
+        .section {
+            margin: 20px 0;
+        }
+
+        .section h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .section p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Order Items List */
+        .items {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .items li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+            color: #555;
+        }
+
+        .items li:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 30px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        
+    .btns {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    .btns:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
+    </style>
+</head>
+
+<body>
+    <br>
+    <div class="container">
+        <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+            <nav>
+                <span style="color: red; font-size: 1.3em; margin-right: 15px; margin-top: 5px;">Hello, {{ user.username }}</span>
+                <a href="{% url 'home' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Home</a>
+                <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+                <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+                <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+              </nav>
+        </header>
+        <!-- Order Details Section -->
+        <div class="basic_details">
+            <h2>Order Details for Order ID : {{ order.id }}</h2>
+            <br>
+            <hr>
+            <br>
+            <p>Customer Name: <strong> {{ order.user.first_name }} {{ order.user.last_name }}  </strong></p>
+            <p>Phone Number : <strong>{{profile.phone_number}} </strong> </p>
+            <br>
+            <hr>
+            <br>
+            <p class="order_details">Order Date: {{ order.created_at }}</p>
+            <p class="order_details">Total Price: ${{ order.total_price }}</p>
+            <p class="order_details">Status: {{ order.status }}</p>
+            <br>
+            <hr>
+        </div>
+        
+        
+
+        <!-- Shipping Address Section -->
+        <div class="section">
+            <h3>Shipping Address:</h3>
+            <p>{{ order.address }}</p>
+        </div>
+
+        <hr>
+
+        <!-- Order Items Section -->
+        <div class="section">
+            <h3>Items:</h3>
+            <ul class="items">
+                {% if order.items.all %}
+                    {% for item in order.items.all %}
+                        <li>
+                            <span class="item-name">{{ item.quantity }} x {{ item.product.name }}</span>
+                            <span>${{ item.price }} each</span>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No items found in this order.</li>
+                {% endif %}
+            </ul>
+        </div>
+<hr>
+        <!-- Add this button in your order_detail.html -->
+<div class="section">
+    <a href="{% url 'download_invoice' order.id %}" class="btns">Download Invoice</a>
+</div>
+
+        <!-- Back to Home Button -->
+        <a href="{% url 'home' %}" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

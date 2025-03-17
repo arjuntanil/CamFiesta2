@@ -1,0 +1,387 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .header {
+            background: black;
+            height: 80px;
+            width: 100%;
+        }
+        .row1 {
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+            padding: 14px;
+            margin-left: 5px;
+        }
+        .name1 {
+            margin-left: 160px;
+            margin-right: 270px;
+        }
+        .home {
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+            text-decoration: none;
+            margin-right: 40px;
+        }
+        .search-box {
+            width: 100%; 
+            max-width: 400px; 
+            padding: 10px 15px; 
+            border: 2px solid #ffffff; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            transition: border-color 0.5s; 
+        }
+        .search-box:focus {
+            border-color: #383838; 
+            outline: none; 
+        }
+        .login {
+            width: 400px; 
+            margin: auto; 
+            padding: 20px;
+            background: black;  /* Changed to black for form */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: white;  /* Text color for the form */
+        }
+        #loginform {
+            background: rgb(0, 0, 0);
+            justify-content: center;
+            border-radius: 8px;
+            width: 99%;
+        }
+        .input-box {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 23px;
+            font-size: 16px;
+            color: black; /* Text color for input */
+        }
+        .input-box:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        #head {
+            font-size: 60px;
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+            color: rgb(0, 0, 0)
+        }
+        .fp {
+            font-family: 'Open Sans', sans-serif;
+            color: rgb(255, 255, 255);
+            font-size: 15px;
+            text-decoration: none;
+        }
+        #submit {
+            height: 35px;
+            width: 60px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            margin-top: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            border: 2px black;
+            border-radius: 9px;
+            font-family: 'Open Sans', sans-serif;
+            margin-left: 43%;
+            transition: transform 0.2s ease;
+        }
+        #submit:hover {
+            background-color: black;
+            color: white;
+            size-adjust: 2;
+            transform: scale(1.1);
+        }
+        .nwusr {
+            height: 35px;
+            width: 150px;
+            margin: 0 auto;
+            background-color: #000000;
+            color: #ffffff;
+            margin-top: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 255px;
+            border-color: black;
+            border-radius: 9px;
+            font-family: 'Open Sans', sans-serif;
+            margin-left: 45%;
+            transition: transform 0.2s ease;
+        }
+        .nwusr:hover {
+            transform: scale(1.1); 
+        }
+        #footer {
+            margin-top: 50px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 50;
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 50px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<header class="header">
+    <table>
+        <tr class="row1">
+            <td><h2 class="name1"><b>CamFiesta</b></h2></td>
+            <td><a class="home" href="{% url 'home' %}">Home</a></td>
+            <td><a class="home" href="">Login</a></td>
+            
+        </tr>
+    </table>
+</header>
+<body>
+    <h2 id="head">Login</h2>
+
+    {% if messages %}
+        <div class="error-messages">
+            {% for message in messages %}
+                <p style="color: red; font-size: 14px; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="login">
+        <form id="loginform" method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }} 
+            
+            <input type="text" class="input-box" name="username" placeholder="Username"><br>
+            <input type="password" class="input-box" name="password" placeholder="Password">
+            <a class="fp" href="">Forgot Password...?</a><br>
+            <button id="submit" type="submit"><b>Submit</b></button>
+        </form>
+    </div><br>
+    <a href="{% url 'register' %}"><button class="nwusr"><b>New user..?</b></button></a> 
+<footer>
+    <p id="footer">All rights are reserved | CamFiesta</p>
+</footer>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+.header {
+    background: black;
+    height: 80px;
+    width: 100%;
+}
+.row1 {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    padding: 14px;
+    margin-left: 5px;
+}
+.name1 {
+    margin-left: 160px;
+    margin-right: 270px;
+}
+.home {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    text-decoration: none;
+    margin-right: 40px;
+}
+.search-box {
+    width: 100%; 
+    max-width: 400px; 
+    padding: 10px 15px; 
+    border: 2px solid #ffffff; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    transition: border-color 0.5s; 
+}
+.search-box:focus {
+    border-color: #383838; 
+    outline: none; 
+}
+.login {
+    width: 400px; 
+    margin: auto; 
+    padding: 20px;
+    background: black;  /* Changed to black for form */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: white;  /* Text color for the form */
+}
+#loginform {
+    background: rgb(0, 0, 0);
+    justify-content: center;
+    border-radius: 8px;
+    width: 99%;
+}
+.input-box {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 23px;
+    font-size: 16px;
+    color: black; /* Text color for input */
+}
+.input-box:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+#head {
+    font-size: 60px;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(0, 0, 0)
+}
+.fp {
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    text-decoration: none;
+}
+
+#submit {
+    height: 35px;
+    width: 60px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    margin-top: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 2px black;
+    border-radius: 9px;
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 43%;
+    transition: transform 0.2s ease;
+}
+#submit:hover {
+    background-color: black;
+    color: white;
+    size-adjust: 2;
+    transform: scale(1.1);
+}
+.nwusr {
+    height: 35px;
+    width: 150px;
+    margin: 0 auto;
+    background-color: #000000;
+    color: #ffffff;
+    margin-top: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 255px;
+    border-color: black;
+    border-radius: 9px;
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 45%;
+    transition: transform 0.2s ease;
+}
+.nwusr:hover {
+    transform: scale(1.1); 
+}
+#footer {
+    margin-top: 50px;
+    font-size: 12px;
+    text-align: center;
+    opacity: 50;
+    font-family: 'Open Sans', sans-serif;
+    margin-top: 50px;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+    </style>
+    <script>
+         window.onload = function() {
+            if (!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        };
+    </script>
+</head>
+<header class="header">
+    <table>
+        <tr class="row1">
+            <td><h2 class="name1"><b>CamFiesta</b></h2></td>
+            <td><a class="home" href="{% url 'home' %}">Home</a></td>
+            <td><a class="home" href="{% url 'register' %}">Sign Up</a></td>
+        </tr>
+    </table>
+</header>
+<body>
+    <h2 id="head">Login</h2>
+
+    {% if messages %}
+        <div id="error-messages" class="error-messages">
+            {% for message in messages %}
+                <p style="color: red; font-size: 14px; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="login">
+        <form id="loginform" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }} 
+            <input type="text" class="input-box" name="username" placeholder="Username"><br>
+            <input type="password" class="input-box" name="password" placeholder="Password" id="password"><br>
+            <label>
+                <input type="checkbox" onclick="togglePassword()" style="text-align: center; margin-left: 131px;"> Show Password
+            </label>
+            <br>
+            <a class="fp" href="{% url 'forgot_password' %}">Forgot Password...?</a><br>
+           
+            <button id="submit" type="submit"><b>Submit</b></button>
+        </form>
+    </div><br>
+   
+    <a href="{% url 'register' %}"><button class="nwusr"><b>New user..?</b></button></a> 
+    <footer>
+        <p id="footer">All rights are reserved | CamFiesta</p>
+    </footer>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>
+
+

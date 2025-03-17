@@ -1,0 +1,383 @@
+<!-- product.html --> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }}</title>
+    <style>
+
+
+html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden; 
+        }
+        
+       
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        header{
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5; /* Light background color */
+        }
+        header {
+            background-color: #000000; /* Dark header */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        nav a:hover {
+            text-decoration: underline; /* Add hover effect */
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white; /* White background for card */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            overflow: hidden; /* Contain floated elements */
+            padding: 20px;
+        }
+        .row {
+            display: flex; /* Flexbox for layout */
+        }
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center; /* Center image */
+            align-items: center; /* Center image */
+            background-color: #f9f9f9; /* Light background for image section */
+            padding: 20px;
+        }
+        .image-container img {
+            max-width: 100%; /* Responsive image */
+            border-radius: 8px; /* Rounded corners for image */
+        }
+        .info-container {
+            flex: 2;
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 1.8em;
+            margin: 0 0 10px;
+        }
+        .card-text {
+            margin: 5px 0;
+            color: #000000; /* Grey text color for description */
+        }
+        .button-container {
+            margin-top: 20px; /* Space above buttons */
+        }
+        .button {
+            background-color: #000000; /* Button color */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 10px; /* Space between buttons */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Align inline */
+        }
+        .button:hover {
+            background-color: #555; /* Darker on hover */
+        }
+        .card-text-Price {
+            margin: 5px 0;
+            color: #ff0000; 
+        }
+        footer {
+            font-family: 'Open Sans', sans-serif;
+            margin-top: 50px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0.5;
+        }
+        .related-images {
+            margin-top: 30px;
+        }
+        .related-images h4 {
+            margin-bottom: 10px;
+        }
+        .related-images img {
+            width: 150px; /* Set a larger fixed width for related images */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 10px; /* Space between images */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+            transition: transform 0.3s; /* Smooth scale effect */
+            border: 1px solid #ddd; /* Light border for minimalistic design */
+        }
+        .related-images img:hover {
+            transform: scale(1.1); /* Scale up on hover */
+        }
+        .comments-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd; /* Top border */
+            padding-top: 20px;
+        }
+        .comment {
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px; /* Rounded corners */
+        }
+        .comment h6 {
+            margin: 0 0 5px;
+        }
+        .comment p {
+            margin: 0;
+        }
+
+
+        .review_section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .review_section h3 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .review_section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .review_section ul li {
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .review_section ul li strong {
+            font-size: 1.1em;
+            color: #222;
+        }
+
+        .review_section ul li small {
+            display: block;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .review_section ul li p {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #444;
+        }
+
+        .review_section form {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .review_section form input, .review_section form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1em;
+            color: #555;
+        }
+
+        .review_section form button {
+            background-color: #000000;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+
+        .review_section form button:hover {
+            background-color: #444;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .review_section h3 {
+                font-size: 1.6em;
+            }
+
+            .review_section form input, .review_section form textarea {
+                font-size: 0.9em;
+            }
+
+            .review_section form button {
+                font-size: 1em;
+            }
+        }
+
+
+   </style>
+</head>
+<body>
+
+    <header class="header" style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+        <nav style="margin-top: 10px; display: flex; align-items: center;">
+            {% if user.is_authenticated %}
+                <span style="color: red; font-size: 1.2em; margin-right: 15px;">Hello, {{ user.username }}</span>
+                <a href="{% url 'home' %}" style="color: white; margin: 0 10px; text-decoration: none; font-size: 1.2em;">Home</a>
+                <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+                <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+                <a href="{% url 'view_cart'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Cart</a>
+                <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+            {% else %}
+                <a href="{% url 'login' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Login</a>
+                <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+            {% endif %}
+        </nav>
+    </header>
+
+<div class="container">
+    <div class="row">
+        <div class="image-container">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="" alt="Default Image"> 
+            {% endif %}
+        </div>
+        <div class="info-container">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            <p class="card-text-Price"><strong>Price: ${{ product.price }}</strong></p>
+            <p class="card-text"><small>In stock: {{ product.stock }}</small></p>
+            
+            <div class="button-container">
+               
+                
+                <a href="{% url 'add_to_cart' product.id %}" class="button">Add to Cart and Order Now</a>
+
+                <!-- <a href="" class="button">Buy Now</a> -->
+                <a href="javascript:void(0);" class="button" onclick="shareProduct('{{ product.name }}', '{{ product.image.url }}')">Share</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Images Section -->
+    <div class="related-images">
+        <h4>Related Images</h4>
+        <div>
+            {% for image in product.images.all %}
+                <img src="{{ image.image.url }}" alt="Related image for {{ product.name }}" onclick="openImage('{{ image.image.url }}')" />
+            {% empty %}
+                <p>No related images available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    
+
+<div class="review_section">
+    <h3>Reviews:</h3>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}</strong> (Rating: {{ review.rating }})<br>
+                    {{ review.content }}<br>
+                    <small>Posted on {{ review.created_at|date:"F j, Y, g:i a" }}</small>
+                    
+                    <!-- Delete button (if review belongs to the logged-in user) -->
+                    {% if review.user == user %}
+                        <form method="POST" action="{% url 'delete_review' review.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button" style="background-color: red;">Delete Review</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
+
+    <h3>Submit a Review:</h3>
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="rating_dropdown" >Submit Review</button>
+        </form>
+    {% else %}
+        <p>You must be logged in to submit a review.</p>
+    {% endif %}
+</div>
+
+
+
+
+<footer>
+    <p>© 2024 CamFiesta. All Rights Reserved.</p>
+</footer>
+
+<script>
+    function shareProduct(name, imageUrl) {
+        const shareText = `Check out this product: ${name}`;
+        const shareUrl = imageUrl; // You can also add the product URL here if needed
+        if (navigator.share) {
+            navigator.share({
+                title: name,
+                text: shareText,
+                url: shareUrl,
+            })
+            .then(() => console.log('Share successful!'))
+            .catch((error) => console.log('Sharing failed', error));
+        } else {
+            alert('Share feature not supported in this browser.'); // Fallback
+        }
+    }
+
+    function openImage(imageUrl) {
+        window.open(imageUrl, '_blank'); // Open the image in a new tab
+    }
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Profile</title>
+  <style>
+    /* Styles for profile page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .profile-container {
+      width: 50%;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    form{
+      padding-right: 9px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+      height: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .fp {
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    text-decoration: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+
+  </style>
+  <script>
+    function validateForm() {
+      const phoneNumber = document.querySelector('[name="phone_number"]').value;
+      const address = document.querySelector('[name="address"]').value;
+      let isValid = true;
+      
+      // Validate phone number (must be a 10-digit number)
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        document.getElementById("phone-error").textContent = "Phone number must be 10 digits.";
+        isValid = false;
+      } else {
+        document.getElementById("phone-error").textContent = "";
+      }
+
+      // Validate address (cannot be empty)
+      if (address.trim() === "") {
+        document.getElementById("address-error").textContent = "Address cannot be empty.";
+        isValid = false;
+      } else {
+        document.getElementById("address-error").textContent = "";
+      }
+
+      return isValid;
+    }
+  </script>
+</head>
+
+<body>
+  <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+    <nav>
+        <span style="color: red; font-size: 1.3em; margin-right: 15px; margin-top: 5px;">Hello, {{ user.username }}</span>
+        <a href="{% url 'home' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Home</a>
+        <a href="{% url 'view_cart'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Add to Cart</a>
+        <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+        <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+    </nav>
+  </header>
+
+  <div class="profile-container">
+    <h2>Your Profile</h2>
+
+    <form method="POST" onsubmit="return validateForm()">  
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" name="phone_number" value="{{ user.profile.phone_number|default:'Add Phone Number' }}">
+        <div id="phone-error" class="error"></div>
+      </div>
+      <div class="form-group">
+        <label for="address">Address including PINCODE:</label>
+        <textarea name="address">{{ user.profile.address }}</textarea>
+        <div id="address-error" class="error"></div>
+      </div>
+      <button type="submit">Update Profile</button>
+    </form>
+
+    <br>
+    <a href="{% url 'password_profile_reset' %}" style= "color: #000000;">Reset Password</a>
+  </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Profile</title>
+  <style>
+    /* Styles for profile page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .profile-container {
+      width: 50%;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    form{
+      padding-right: 9px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+      height: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .fp {
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    text-decoration: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+
+  </style>
+  <script>
+    function validateForm() {
+      const phoneNumber = document.querySelector('[name="phone_number"]').value;
+      const address = document.querySelector('[name="address"]').value;
+      let isValid = true;
+      
+      // Validate phone number (must be a 10-digit number)
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        document.getElementById("phone-error").textContent = "Phone number must be 10 digits.";
+        isValid = false;
+      } else {
+        document.getElementById("phone-error").textContent = "";
+      }
+
+      // Validate address (cannot be empty and must end with a 6-digit PIN code)
+      const pincodeRegex = /\d{6}$/;  // Matches a 6-digit PIN code at the end of the string
+      if (address.trim() === "") {
+        document.getElementById("address-error").textContent = "Address cannot be empty.";
+        isValid = false;
+      } else if (!pincodeRegex.test(address)) {
+        document.getElementById("address-error").textContent = "Please fill address with pincode.";
+        isValid = false;
+      } else {
+        document.getElementById("address-error").textContent = "";
+      }
+
+      return isValid;
+    }
+  </script>
+</head>
+
+<body>
+  <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+    <nav>
+        <span style="color: red; font-size: 1.3em; margin-right: 15px; margin-top: 5px;">Hello, {{ user.username }}</span>
+        <a href="{% url 'home' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Home</a>
+        <a href="{% url 'view_cart'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Cart</a>
+        <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+        <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+    </nav>
+  </header>
+
+  <div class="profile-container">
+    <h2>Your Profile</h2>
+
+    <form method="POST" onsubmit="return validateForm()">  
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" value="{{ user.first_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" value="{{ user.last_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" name="phone_number" value="{{ user.profile.phone_number|default:'Add Phone Number' }}">
+        <div id="phone-error" class="error"></div>
+      </div>
+      <div class="form-group">
+        <label for="address">Address including PINCODE:</label>
+        <textarea name="address">{{ user.profile.address }}</textarea>
+        <div id="address-error" class="error"></div>
+      </div>
+      <button type="submit">Update Profile</button>
+    </form>
+
+    <br>
+    <a href="{% url 'password_profile_reset' %}" style= "color: #000000;">Reset Password</a>
+  </div>
+</body>
+</html>

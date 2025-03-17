@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header styling */
+header {
+    background-color: #000000;
+    color: white;
+    padding: 20px 0;  /* Removed side padding to fit the full width */
+    width: 100%;      /* Ensure the header takes up the full width */
+}
+
+header h2 {
+    margin: 0;
+    font-size: 2.5em;
+    text-align: center;  /* Center the title */
+}
+
+nav {
+    display: flex;
+    justify-content: center; /* Center the nav items */
+    gap: 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 5px 15px;
+}
+
+nav a:hover {
+    background-color: #444;
+    border-radius: 5px;
+}
+
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+       
+        
+
+        header h2 {
+            font-size: 40px /* Increased font size for the heading */
+            
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 5px 15px;
+        }
+
+        nav a:hover {
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        .search-box {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Main container for the cart */
+        .cart-container {
+            width: 100%;
+            max-width: 1200px;  /* Ensures the cart content is not too stretched */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #000;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Form input and buttons */
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        h2, .total-price {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .total-price {
+            font-weight: bold;
+        }
+
+        .confirm-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Style for empty cart message */
+        .empty-cart-message {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        /* Link for home page */
+        .home {
+            text-decoration: none;
+            color: #000;
+            font-size: 1.1em;
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .home:hover {
+            color: #28a745;
+        }
+
+        /* Aligning the buttons inside the table properly */
+        .form-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group form {
+            display: inline-block;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+        <nav>
+            <span style="color: red; font-size: 1.3em; margin-right: 15px; margin-top: 5px;">Hello, {{ user.username }}</span>
+            <a href="{% url 'home' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Home</a>
+            <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+            <a href="{% url 'order_history' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Orders</a>
+            <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+    
+        </nav>
+    </header>
+
+    
+
+    <div class="cart-container">
+        <h1>Your Shopping Cart</h1>
+
+        {% if cart_items_with_total %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item_info in cart_items_with_total %}
+                        <tr>
+                            <td>{{ item_info.item.product.name }}</td>
+                            <td>{{ item_info.item.quantity }}</td>
+                            <td>${{ item_info.item.product.price }}</td>
+                            <td>${{ item_info.item_total }}</td>
+                            <td class="form-group">
+                                <!-- Update quantity form -->
+                                <form action="{% url 'update_cart_item' item_info.item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item_info.item.quantity }}" min="1" max="{{ item_info.item.product.stock }}">
+                                    <button type="submit">Update</button>
+                                </form>
+
+                                <!-- Delete item form -->
+                                <form action="{% url 'delete_cart_item' item_info.item.product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h2 class="total-price">Total Price: ${{ total_price }}</h2>
+<!-- cart.html -->
+<form action="{% url 'confirm_order' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="confirm-order-btn">Confirm Order</button>
+</form>
+
+
+        {% else %}
+            <p class="empty-cart-message">Your cart is empty.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'home' %}" class="home">Back to Home</a>
+</body>
+</html>

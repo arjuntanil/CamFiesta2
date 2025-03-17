@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        /* Basic reset for margins and padding */
+        body, h1, h3, p, ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header section styling */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        /* Navigation styling */
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main content styling */
+        main {
+            padding: 20px;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        main h3 {
+            color: #000000;
+            font-size: 1.8em;
+        }
+
+        main p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        /* Styling for the order list */
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin: 15px 0;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        /* Footer section */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #000000;
+            color: rgb(148, 148, 148);
+            margin-top: 30px;
+        }
+
+        footer p {
+            font-size: 1.1em;
+        }
+
+        /* Styling for empty order history message */
+        .no-orders {
+            font-size: 1.5em;
+            color: #e74c3c;
+            text-align: center;
+        }
+
+        /* Responsiveness */
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            main {
+                padding: 15px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header style="background-color: #000000; color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="name1" style="margin: 0; font-size: 2.5em;"><b>CamFiesta</b></h2>
+        <nav>
+            <span style="color: red; font-size: 1.3em; margin-right: 15px; margin-top: 5px;">Hello, {{ user.username }}</span>
+            <a href="{% url 'home' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Home</a>
+            <a href="{% url 'profile'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">View Profile</a>
+            <a href="{% url 'view_cart'%}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Cart</a>
+            <a href="{% url 'search' %}" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.2em;">Search</a>
+        </nav>
+    </header>
+    <br>
+    <h1 style="text-align: center;">Order History</h1>
+    <main>
+        {% if order_details %}
+            <ul>
+                {% for order in order_details %}
+                    <li>
+                        <h3>Order ID: {{ order.order_id }}</h3>
+                        <p>Date: {{ order.order_date }}</p>
+                        <p>Total Price: ${{ order.total_price }}</p>
+                        <p>Status: {{ order.status }}</p>
+                        <ul>
+                            {% for item in order.items %}
+                                <li style="font-size: 18px;">
+                                    <b>{{ item.name }} - Quantity: {{ item.quantity }} - Price for each product: ${{ item.price }} - Total Product: ${{ item.total_price }}</b>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-orders">No order history available.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CamFiesta</p>
+    </footer>
+</body>
+</html>
