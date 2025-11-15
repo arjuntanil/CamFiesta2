@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "name": "camfiesta",
+  "id": null,
+  "platform": {
+    "os": "linux",
+    "runtimeStack": "PYTHON|3.10"
+  },
+  "properties": {
+    "numberOfWorkers": 1,
+    "supported": true
+  }
+}

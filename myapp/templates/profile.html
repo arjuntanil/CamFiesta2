@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Profile - CamFiesta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+    }
+
+    /* Header Styles */
+    .header {
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      color: white;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      /* MODIFIED: Increased header height */
+      height: 90px;
+    }
+
+    .logo {
+      /* MODIFIED: Increased logo font size */
+      font-size: 2.3rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .camera-icon {
+      font-size: 1.8rem;
+      color: #ff0000;
+    }
+
+    /* Desktop Navigation */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .user-greeting {
+      color: #ff0000;
+      /* MODIFIED: Increased greeting font size */
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      /* MODIFIED: Increased nav link font size */
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #ff0000;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background:#ff0000;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .mobile-menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 3px 0;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn.active span:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .mobile-menu-btn.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-btn.active span:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      /* MODIFIED: Adjusted top position for new header height */
+      top: 90px;
+      left: -100%;
+      width: 100%;
+      /* MODIFIED: Adjusted height calculation */
+      height: calc(100vh - 90px);
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      transition: left 0.3s ease;
+      z-index: 999;
+    }
+
+    .mobile-menu.active {
+      left: 0;
+    }
+
+    .mobile-menu-content {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .mobile-menu-content .user-greeting {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      color: #ff0000;
+    }
+
+    .mobile-menu-content a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-menu-content a:hover {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff0000;
+      transform: translateX(10px);
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .profile-container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff0000, #4ecdc4, #45b7d1);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .profile-header h2 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .profile-icon {
+      font-size: 4rem;
+      color: #ff0000;
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 20px;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 50%;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      display: block;
+      font-size: 1rem;
+    }
+
+    .input-container {
+      position: relative;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #ff0000;
+      background: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255, 107, 107, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 1.2rem;
+    }
+
+    .error {
+      color:#ff0000;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .update-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(100deg, #ff0000, #68b4c7ff);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .update-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .update-btn:hover::before {
+      left: 100%;
+    }
+
+    .update-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+    }
+
+    .reset-password-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 20px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .reset-password-link:hover {
+      background: rgba(255, 107, 107, 0.1);
+      color: #ff0000;
+      transform: translateX(5px);
+    }
+
+    /* Decorative Elements */
+    .decorative-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+    }
+
+    .shape-1 {
+      top: 10%;
+      right: 10%;
+      font-size: 3rem;
+      color: #ff0000;
+      animation: rotate 20s linear infinite;
+    }
+
+    .shape-2 {
+      bottom: 20%;
+      left: 5%;
+      font-size: 2.5rem;
+      color: #4ecdc4;
+      animation: rotate 15s linear infinite reverse;
+    }
+
+    .shape-3 {
+      top: 60%;
+      right: 20%;
+      font-size: 2rem;
+      color: #45b7d1;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .profile-container {
+        padding: 20px;
+        margin: 20px 10px;
+      }
+
+      .profile-header h2 {
+        font-size: 2rem;
+      }
+
+      .profile-icon {
+        font-size: 3rem;
+        padding: 15px;
+      }
+
+      .main-content {
+        margin: 20px auto;
+      }
+
+      .shape {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-container {
+        padding: 0 15px;
+        /* MODIFIED: Increased mobile header height */
+        height: 70px;
+      }
+
+      .logo {
+        font-size: 1.3rem;
+      }
+
+      .mobile-menu {
+        /* MODIFIED: Adjusted mobile menu position */
+        top: 70px;
+        height: calc(100vh - 70px);
+      }
+
+      .profile-container {
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      .profile-header h2 {
+        font-size: 1.8rem;
+      }
+
+      .form-group input[type="text"],
+      .form-group textarea {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="decorative-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="camera-icon"></span>
+        <span>CamFiesta</span>
+      </div>
+
+      <nav class="nav-links">
+        <span class="user-greeting">Hello, {{ user.username }}</span>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'view_cart' %}">Cart</a>
+        <a href="{% url 'order_history' %}">Orders</a>
+        <a href="{% url 'search' %}">Search</a>
+      </nav>
+
+      <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mobile-menu-content">
+        <div class="user-greeting">Hello, {{ user.username }}</div>
+        <a href="{% url 'home' %}" onclick="closeMobileMenu()">Home</a>
+        <a href="#" onclick="closeMobileMenu()">Profile</a>
+        <a href="{% url 'view_cart' %}" onclick="closeMobileMenu()">Cart</a>
+        <a href="{% url 'order_history' %}" onclick="closeMobileMenu()">Orders</a>
+        <a href="{% url 'search' %}" onclick="closeMobileMenu()">Search</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-icon">👤</div>
+        <h2>Your Profile</h2>
+        <p style="color: #666; margin-top: 10px;">Manage your personal information</p>
+      </div>
+
+      <form method="POST" onsubmit="return validateForm()">  
+        {% csrf_token %}
+        
+        <div class="form-section">
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <div class="input-container">
+              <input type="text" name="first_name" value="{{ user.first_name }}" required>
+              <span class="input-icon">👤</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <div class="input-container">
+              <input type="text" name="last_name" value="{{ user.last_name }}" required>
+              <span class="input-icon">👤</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <div class="input-container">
+              <input type="text" name="phone_number" value="{{ user.profile.phone_number|default:'Add Phone Number' }}">
+              <span class="input-icon">📱</span>
+            </div>
+            <div id="phone-error" class="error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address including PINCODE</label>
+            <div class="input-container">
+              <textarea name="address" placeholder="Enter your complete address with pincode...">{{ user.profile.address }}</textarea>
+              <span class="input-icon"></span>
+            </div>
+            <div id="address-error" class="error"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="update-btn">
+          Update Profile ✨
+        </button>
+      </form>
+
+      <a href="{% url 'password_profile_reset' %}" class="reset-password-link">
+        🔒 Reset Password
+      </a>
+    </div>
+
+
+    
+
+
+
+  </main>
+
+
+  <footer style="background-color: #000000; color: #b0b0b0; text-align: center; padding: 30px 20px; font-family: 'Segoe UI', sans-serif; border-top: 3px solid #ff0000;">
+    <p style="margin: 5px 0; font-size: 15px;">
+        © 2025 CamFiesta. All Rights Reserved.
+    </p>
+    <p style="margin: 5px 0; font-size: 14px;">
+        Your Ultimate Destination for Photography Gear.
+    </p>
+</footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      
+      mobileMenu.classList.toggle('active');
+      menuBtn.classList.toggle('active');
+    }
+
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      
+      mobileMenu.classList.remove('active');
+      menuBtn.classList.remove('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+      
+      if (!menuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    function validateForm() {
+      const phoneNumber = document.querySelector('[name="phone_number"]').value;
+      const address = document.querySelector('[name="address"]').value;
+      let isValid = true;
+      
+      // Clear previous errors
+      document.getElementById("phone-error").innerHTML = "";
+      document.getElementById("address-error").innerHTML = "";
+      
+      // Validate phone number (must be a 10-digit number)
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        document.getElementById("phone-error").innerHTML = "⚠️ Phone number must be 10 digits.";
+        isValid = false;
+      }
+
+      // Validate address (cannot be empty and must end with a 6-digit PIN code)
+      const pincodeRegex = /\d{6}$/;
+      if (address.trim() === "") {
+        document.getElementById("address-error").innerHTML = "⚠️ Address cannot be empty.";
+        isValid = false;
+      } else if (!pincodeRegex.test(address)) {
+        document.getElementById("address-error").innerHTML = "⚠️ Please include a 6-digit pincode.";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add loading animation to form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const submitBtn = document.querySelector('.update-btn');
+      if (validateForm()) {
+        submitBtn.innerHTML = '⏳ Updating...';
+        submitBtn.disabled = true;
+      }
+    });
+
+    // Enhanced input focus effects
+    document.querySelectorAll('input, textarea').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>

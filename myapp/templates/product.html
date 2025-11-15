@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - CamFiesta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Reset and Smooth Scrolling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        /* Animation for smooth entrance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .product-container {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .gallery-item {
+            animation: slideIn 0.6s ease;
+        }
+
+        .gallery-item:nth-child(2) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.4s; }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 90px;
+        }
+
+        .logo {
+            font-size: 2.3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .camera-icon {
+            font-size: 1.8rem;
+            color: #ff0000;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .user-greeting {
+            color: #ff0000;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Chatbot Styles */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #chatbot-toggler {
+            background-color: #000000;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+
+        #chatbot-toggler:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbot-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .chat-header {
+            background-color: #000000;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .send-btn {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin: 5px 0;
+        }
+
+        .user-message {
+            background-color: #000000;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #f0f0f0;
+            color: black;
+            align-self: flex-start;
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            #chatbot-window {
+                width: 500px;
+                height: 700px;
+                bottom: 80px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #chatbot-window {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff0000;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .user-greeting {
+            color: #ff0000;
+            font-weight: 500;
+            margin-right: 1rem;
+            display: none;
+        }
+
+        /* Desktop Navigation */
+        .nav-desktop {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-desktop a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        .nav-desktop a:hover {
+            color: #ff0000;
+        }
+
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        .nav-mobile {
+            position: fixed;
+            top: 80px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-mobile.active {
+            left: 0;
+        }
+
+        .nav-mobile a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-mobile a:hover {
+            border-left-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 1rem;
+        }
+
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+        }
+
+        /* Product Header */
+        .product-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid #ff0000;
+        }
+
+        .product-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,0,0,0.05) 50%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .product-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .product-header i {
+            color: #ff0000;
+        }
+
+        /* Product Main Section */
+        .product-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        .product-image-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .main-image-container {
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+        }
+
+        .main-image-container::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px dashed #ddd;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .main-image-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,0,0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .main-image-container img {
+            max-width: 100%;
+            max-height: 450px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-image-container img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(255,0,0,0.15);
+        }
+
+        .product-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .product-title {
+            font-size: 1.9rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .product-title i {
+            color: #ff0000;
+        }
+
+        .product-description {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.7;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #ff0000;
+        }
+
+        .product-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .meta-item i {
+            color: #ff0000;
+            width: 20px;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff0000;
+        }
+
+        .stock {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .stock.low {
+            color: #ffc107;
+        }
+
+        .stock.out {
+            color: #dc3545;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Related Images */
+        .related-images {
+            padding: 3rem;
+            border-top: 1px solid #eee;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .section-header i {
+            color: #ff0000;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid #e8e8e8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .gallery-item:hover::before {
+            left: 100%;
+        }
+
+        .gallery-item:hover {
+            border-color: #ff0000;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(255,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 3rem;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .rating {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .star {
+            color: #ff0000;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .star.filled {
+            color: #ff0000;
+        }
+
+        .star.empty {
+            color: #e0e0e0;
+        }
+
+        .rating-number {
+            margin-left: 8px;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .review-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .user-greeting {
+                display: block;
+            }
+
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                margin-top: 80px;
+                padding: 1rem;
+            }
+
+            .product-header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .product-main {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
+
+            .product-title {
+                font-size: 1.8rem;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .product-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .image-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .related-images,
+            .reviews-section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 0 0.5rem;
+            }
+
+            .logo h1 {
+                font-size: 1.3rem;
+            }
+
+            .product-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .product-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .product-main {
+                padding: 1.5rem 1rem;
+            }
+
+            .image-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+
+        /* Image Modal */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-nav:hover {
+            background: rgba(255,0,0,0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-prev {
+            left: 30px;
+        }
+
+        .modal-next {
+            right: 30px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,0,0,0.8);
+            color: white;
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .modal-close:hover {
+            background: #ff0000;
+            transform: scale(1.1);
+        }
+
+        .modal-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                
+                <h1>CamFiesta</h1>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-desktop">
+                {% if user.is_authenticated %}
+                    <span class="user-greeting">Hello, {{ user.username }}</span>
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'profile' %}"> Profile</a>
+                    <a href="{% url 'order_history' %}">Orders</a>
+                    <a href="{% url 'view_cart' %}"> Cart</a>
+                    <a href="{% url 'search' %}"> Search</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    <a href="{% url 'search' %}">Search</a>
+                {% endif %}
+            </div>
+
+            <!-- Mobile Hamburger Menu -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="nav-mobile" id="mobileNav">
+            {% if user.is_authenticated %}
+                <span class="user-greeting">Hello, {{ user.username }}</span>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'profile' %}"><i class="fas fa-user"></i> View Profile</a>
+                <a href="{% url 'order_history' %}"><i class="fas fa-box"></i> Orders</a>
+                <a href="{% url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a>
+                <a href="{% url 'search' %}"><i class="fas fa-search"></i> Search</a>
+            {% else %}
+                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{% url 'search' %}"><i class="fas fa-search"></i> Search</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="product-container">
+            <!-- Product Header -->
+            <div class="product-header">
+                <h1>
+                    <i class="fas fa-camera"></i>
+                    {{ product.name }}
+                </h1>
+            </div>
+
+            <!-- Product Main Section -->
+            <div class="product-main">
+                <!-- Product Image Section -->
+                <div class="product-image-section">
+                    <div class="main-image-container">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" onclick="openImage('{{ product.image.url }}')">
+                        {% else %}
+                            <div style="text-align: center; color: #999; padding: 4rem;">
+                                <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                                <p>No image available</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Product Info Section -->
+                <div class="product-info-section">
+                    <h2 class="product-title">
+                        <i class="fas fa-tag"></i>
+                        {{ product.name }}
+                    </h2>
+
+                    <div class="product-description">
+                        <i class="fas fa-info-circle" style="color: #ff0000; margin-right: 10px;"></i>
+                        {{ product.description }}
+                    </div>
+
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span class="price">${{ product.price }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-cubes"></i>
+                            <span class="stock {% if product.stock < 5 %}low{% elif product.stock == 0 %}out{% endif %}">
+                                {% if product.stock > 0 %}
+                                    {{ product.stock }} in stock
+                                {% else %}
+                                    Out of stock
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i>
+                            Add to Cart
+                        </a>
+                        <a href="javascript:void(0);" class="btn btn-secondary" onclick="shareProduct('{{ product.name }}', '{{ product.image.url }}')">
+                            <i class="fas fa-share-alt"></i>
+                            Share Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Images Section -->
+            {% if product.images.all %}
+            <div class="related-images">
+                <h3 class="section-header">
+                    <i class="fas fa-images"></i>
+                    Product Gallery
+                </h3>
+                {% if product.images.all %}
+                <div class="image-gallery">
+                    {% for image in product.images.all %}
+                        <div class="gallery-item" onclick="openImageModal({{ forloop.counter0 }})">
+                            <img src="{{ image.image.url }}" alt="Gallery image for {{ product.name }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Reviews Section -->
+            <div class="reviews-section">
+                <h3 class="section-header">
+                    <i class="fas fa-star"></i>
+                    Customer Reviews
+                </h3>
+
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="review-card">
+                        <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            {{ review.user.username|first|upper }}
+                        </div>
+                        <div>
+                            <strong>{{ review.user.username }}</strong>
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star {% if forloop.counter <= review.rating %}filled{% else %}empty{% endif %}"></i>
+                                {% endfor %}
+                                <span class="rating-number">({{ review.rating }}/5)</span>
+                            </div>
+                        </div>
+                    </div>
+                            <small style="color: #666;">{{ review.created_at|date:"M j, Y" }}</small>
+                        </div>
+                        <p>{{ review.content }}</p>
+                        
+                        {% if review.user == user %}
+                            <form method="POST" action="{% url 'delete_review' review.id %}" style="margin-top: 1rem;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="background: #dc3545; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                                    <i class="fas fa-trash"></i>
+                                    Delete Review
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="review-card" style="text-align: center; color: #666;">
+                        <i class="fas fa-comment-slash" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <p>No reviews yet. Be the first to review this product!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Review Form -->
+                {% if user.is_authenticated %}
+                <div class="review-form">
+                    <h4 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-edit" style="color: #ff0000;"></i>
+                        Write a Review
+                    </h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Review
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="review-form" style="text-align: center; color: #666;">
+                    <i class="fas fa-user-lock" style="font-size: 2rem; color: #ddd; margin-bottom: 1rem;"></i>
+                    <p>You must be logged in to submit a review.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Review
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <button class="modal-close" onclick="closeImageModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="modal-nav modal-prev" onclick="previousImage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="modal-nav modal-next" onclick="nextImage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="modal-counter" id="modalCounter"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background-color: #000000; color: #b0b0b0; text-align: center; padding: 30px 20px; font-family: 'Segoe UI', sans-serif; border-top: 3px solid #ff0000;">
+    <p style="margin: 5px 0; font-size: 15px;">
+        © 2025 CamFiesta. All Rights Reserved.
+    </p>
+    <p style="margin: 5px 0; font-size: 14px;">
+        Your Ultimate Destination for Photography Gear.
+    </p>
+</footer>
+
+    <script>
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        // Initialize gallery images array
+        function initializeGallery() {
+            const gallery = document.querySelectorAll('.gallery-item img');
+            galleryImages = Array.from(gallery).map(img => img.src);
+        }
+
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileNav = document.getElementById('mobileNav');
+            
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileNav = document.getElementById('mobileNav');
+            const isClickInsideNav = mobileNav.contains(event.target) || hamburger.contains(event.target);
+            
+            if (!isClickInsideNav && mobileNav.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+            }
+        });
+
+        function shareProduct(name, imageUrl) {
+            const shareText = `Check out this amazing camera: ${name}`;
+            const shareUrl = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: name,
+                    text: shareText,
+                    url: shareUrl,
+                })
+                .then(() => console.log('Share successful!'))
+                .catch((error) => console.log('Sharing failed', error));
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('Product link copied to clipboard!');
+                }).catch(() => {
+                    alert('Share feature not supported in this browser.');
+                });
+            }
+        }
+
+        function openImageModal(index) {
+            currentImageIndex = index;
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalCounter = document.getElementById('modalCounter');
+            
+            modalImage.src = galleryImages[currentImageIndex];
+            modalCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+            modal.classList.add('active');
+            
+            // Disable body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            
+            // Re-enable body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            updateModalImage();
+        }
+
+        function previousImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateModalImage();
+        }
+
+        function updateModalImage() {
+            const modalImage = document.getElementById('modalImage');
+            const modalCounter = document.getElementById('modalCounter');
+            
+            modalImage.src = galleryImages[currentImageIndex];
+            modalCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+        }
+
+        // Keyboard navigation for modal
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('imageModal');
+            if (modal.classList.contains('active')) {
+                switch(event.key) {
+                    case 'Escape':
+                        closeImageModal();
+                        break;
+                    case 'ArrowLeft':
+                        previousImage();
+                        break;
+                    case 'ArrowRight':
+                        nextImage();
+                        break;
+                }
+            }
+        });
+
+        // Close modal when clicking outside image
+        document.getElementById('imageModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add loading effect to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.href && !this.href.includes('javascript:')) {
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                }
+            });
+        });
+
+        // Initialize gallery on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGallery();
+        });
+    </script>
+
+    <!-- Chatbot -->
+    <div id="chatbot-container">
+        <button id="chatbot-toggler">
+            <i class="fas fa-comments" style="font-size: 24px;"></i>
+        </button>
+        <div id="chatbot-window">
+            <div class="chat-header">
+                <h3>CamFiesta Assistant</h3>
+                <button id="close-chatbot" style="background: none; border: none; color: white; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-messages">
+                <div class="message bot-message">
+                    Hi! I'm your CamFiesta assistant. How can I help you with photography today?
+                </div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="user-input" placeholder="Type your message...">
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chatbot functionality
+            const chatbotToggler = document.getElementById('chatbot-toggler');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const closeChatbot = document.getElementById('close-chatbot');
+            const userInput = document.getElementById('user-input');
+            const chatMessages = document.getElementById('chat-messages');
+
+            // Toggle chatbot window
+            chatbotToggler.addEventListener('click', function() {
+                chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            // Close chatbot window
+            closeChatbot.addEventListener('click', function() {
+                chatbotWindow.style.display = 'none';
+            });
+
+            // Handle Enter key press
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const message = userInput.value.trim();
+
+            if (message) {
+                // Add user message
+                const userMessageDiv = document.createElement('div');
+                userMessageDiv.className = 'message user-message';
+                userMessageDiv.textContent = message;
+                chatMessages.appendChild(userMessageDiv);
+
+                // Clear input
+                userInput.value = '';
+
+                // Show loading indicator
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'message bot-message';
+                loadingDiv.textContent = 'Typing...';
+                chatMessages.appendChild(loadingDiv);
+
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Send to backend
+                fetch('/chatbot/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove loading indicator
+                    chatMessages.removeChild(loadingDiv);
+
+                    // Add bot response
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.className = 'message bot-message';
+                    botMessageDiv.textContent = data.response;
+                    chatMessages.appendChild(botMessageDiv);
+
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    chatMessages.removeChild(loadingDiv);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'message bot-message';
+                    errorDiv.textContent = 'Connecting to assistant...';
+                    chatMessages.appendChild(errorDiv);
+                    
+                    // Retry the request after a short delay
+                    setTimeout(() => {
+                        fetch('/chatbot/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ message: message })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            chatMessages.removeChild(errorDiv);
+                            const botMessageDiv = document.createElement('div');
+                            botMessageDiv.className = 'message bot-message';
+                            botMessageDiv.textContent = data.response;
+                            chatMessages.appendChild(botMessageDiv);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        })
+                        .catch(retryError => {
+                            console.error('Retry Error:', retryError);
+                            errorDiv.textContent = 'Sorry, I encountered an error. Please check your internet connection and try again.';
+                        });
+                    }, 1000);
+                });
+            }
+        }
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - CamFiesta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            /* MODIFIED: Increased header height */
+            height: 90px;
+        }
+
+        .logo {
+            /* MODIFIED: Increased logo font size */
+            font-size: 2.3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .camera-icon {
+            font-size: 1.8rem;
+            color: #ff0000;
+        }
+
+        /* Desktop Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .user-greeting {
+            color: #ff0000;
+            /* MODIFIED: Increased greeting font size */
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            /* MODIFIED: Increased nav link font size */
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            /* MODIFIED: Adjusted top position for new header height */
+            top: 90px;
+            left: -100%;
+            width: 100%;
+            /* MODIFIED: Adjusted height calculation */
+            height: calc(100vh - 90px);
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            transition: left 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu-content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .mobile-menu-content .user-greeting {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: #ff0000;
+        }
+
+        .mobile-menu-content a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu-content a:hover {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+            transform: translateX(10px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .cart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cart-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .cart-icon {
+            font-size: 4rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Table Styles */
+        .cart-table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .cart-table th {
+            background: linear-gradient(135deg, #000000, #333333);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .cart-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        .cart-table th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .cart-table td {
+            padding: 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-table tr:hover {
+            background: rgba(255, 0, 0, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cart-table tr:last-child td:first-child {
+            border-bottom-left-radius: 12px;
+        }
+
+        .cart-table tr:last-child td:last-child {
+            border-bottom-right-radius: 12px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .price {
+            color: #ff0000;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Form Controls */
+        .quantity-input {
+            width: 70px;
+            padding: 8px 10px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .update-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-update {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .btn-update:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-remove {
+            background: linear-gradient(135deg, #dc3545, #e85d75);
+            color: white;
+        }
+
+        .btn-remove:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: rgba(255, 0, 0, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            border: 2px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .total-price {
+            font-size: 2rem;
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .confirm-order-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confirm-order-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .confirm-order-btn:hover::before {
+            left: 100%;
+        }
+
+        .confirm-order-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h2 {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .empty-cart p {
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #333, #555);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+
+        .back-to-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: flex;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .cart-table th, .cart-table td {
+                padding: 10px 8px;
+            }
+            .action-buttons, .update-form {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                /* MODIFIED: Increased mobile header height */
+                height: 70px;
+            }
+            .mobile-menu {
+                /* MODIFIED: Adjusted mobile menu position */
+                top: 70px;
+                height: calc(100vh - 70px);
+            }
+            .total-price {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                
+                <span>CamFiesta</span>
+            </div>
+
+            <nav class="nav-links">
+                <span class="user-greeting">Hello, {{ user.username }}</span>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'order_history' %}">Orders</a>
+                <a href="{% url 'search' %}">Search</a>
+            </nav>
+
+            <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <div class="user-greeting">Hello, {{ user.username }}</div>
+                <a href="{% url 'home' %}" onclick="closeMobileMenu()">Home</a>
+                <a href="{% url 'profile' %}" onclick="closeMobileMenu()">Profile</a>
+                <a href="#" onclick="closeMobileMenu()">🛒 Cart</a>
+                <a href="{% url 'order_history' %}" onclick="closeMobileMenu()">Orders</a>
+                <a href="{% url 'search' %}" onclick="closeMobileMenu()">Search</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="cart-container">
+            <div class="cart-header">
+                <div class="cart-icon">🛒</div>
+                <h1>Your Shopping Cart</h1>
+                <p style="color: #666; margin-top: 10px;">Review your items before checkout</p>
+            </div>
+
+            {% if cart_items_with_total %}
+                <div class="cart-table-container">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item_info in cart_items_with_total %}
+                                <tr>
+                                    <td>
+                                        <div class="product-name">{{ item_info.item.product.name }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="price">₹{{ item_info.item.product.price }}</span>
+                                    </td>
+                                    <td>
+                                        <form class="update-form" action="{% url 'update_cart_item' item_info.item.product.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="number" name="quantity" value="{{ item_info.item.quantity }}" 
+                                                   min="1" max="{{ item_info.item.product.stock }}" class="quantity-input">
+                                            <button type="submit" class="btn btn-update">
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <span class="price">₹{{ item_info.item_total }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <form action="{% url 'delete_cart_item' item_info.item.product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-remove">
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="total-price">
+                        <span>Total Price: ₹{{ total_price }}</span>
+                    </div>
+
+                    <form action="{% url 'confirm_order' %}" method="post" onsubmit="handleOrderSubmit(this)">
+                        {% csrf_token %}
+                        <button type="submit" class="confirm-order-btn">
+                            <span>Confirm Order</span>
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛍️</div>
+                    <h2>Your cart is empty</h2>
+                    <p>Looks like you haven't added any cameras yet.</p>
+                    <a href="{% url 'home' %}" class="back-to-home">
+                        Continue Shopping
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        
+    </main>
+<footer style="background-color: #000000; color: #b0b0b0; text-align: center; padding: 30px 20px; font-family: 'Segoe UI', sans-serif; border-top: 3px solid #ff0000;">
+    <p style="margin: 5px 0; font-size: 15px;">
+        © 2025 CamFiesta. All Rights Reserved.
+    </p>
+    <p style="margin: 5px 0; font-size: 14px;">
+        Your Ultimate Destination for Photography Gear.
+    </p>
+</footer>
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            mobileMenu.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            mobileMenu.classList.remove('active');
+            menuBtn.classList.remove('active');
+        }
+
+        function handleOrderSubmit(form) {
+            const submitBtn = form.querySelector('.confirm-order-btn');
+            submitBtn.innerHTML = 'Processing...';
+            submitBtn.disabled = true;
+        }
+
+        // --- SCRIPT FIX STARTS HERE ---
+        // Listen for form submissions to show loading state, not button clicks.
+        document.querySelectorAll('.update-form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const updateButton = this.querySelector('.btn-update');
+                if (updateButton) {
+                    updateButton.innerHTML = 'Updating...';
+                    updateButton.disabled = true;
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.closest('form').addEventListener('submit', function(e) {
+                if (!confirm('Are you sure you want to remove this item?')) {
+                    e.preventDefault(); // Stop the form submission
+                } else {
+                    btn.innerHTML = 'Removing...';
+                    btn.disabled = true;
+                }
+            });
+        });
+        // --- SCRIPT FIX ENDS HERE ---
+    </script>
+</body>
+</html>

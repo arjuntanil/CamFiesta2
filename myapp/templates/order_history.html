@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - CamFiesta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Reset and Smooth Scrolling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #000;
+            color: white;
+            /* MODIFIED: Increased vertical padding to make header thicker */
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff0000;
+        }
+
+        .logo h1 {
+            /* MODIFIED: Increased logo font size */
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .user-greeting {
+            color: #ff0000;
+            font-weight: 500;
+            margin-right: 1rem;
+            display: none;
+            /* MODIFIED: Increased font size */
+            font-size: 1.1rem;
+        }
+
+        /* Desktop Navigation */
+        .nav-desktop {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-desktop a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            /* MODIFIED: Increased font size */
+            font-size: 1.1rem;
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        .nav-desktop a:hover {
+            color: #ff0000;
+        }
+
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        .nav-mobile {
+            position: fixed;
+            /* MODIFIED: Adjusted top position for new header height */
+            top: 98px;
+            left: -100%;
+            width: 100%;
+            /* MODIFIED: Adjusted height calculation */
+            height: calc(100vh - 98px);
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1rem;
+        }
+
+        .nav-mobile.active {
+            left: 0;
+        }
+
+        .nav-mobile a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-mobile a:hover {
+            border-left-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        /* Main Content */
+        .main-content {
+            /* MODIFIED: Increased margin to push content below new header */
+            margin-top: 120px;
+            padding: 2rem 1rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title i {
+            color: #ff0000;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .orders-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Order Cards */
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .order-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #ff0000;
+        }
+
+        .order-id {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .order-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .order-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-confirmed {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .status-shipped {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .status-delivered {
+            background: #28a745;
+            color: white;
+        }
+
+        .order-body {
+            padding: 2rem;
+        }
+
+        .order-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #ff0000;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-item i {
+            color: #ff0000;
+            width: 20px;
+        }
+
+        .summary-item strong {
+            color: #333;
+        }
+
+        .total-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff0000;
+        }
+
+        /* Order Items */
+        .order-items {
+            margin-top: 1.5rem;
+        }
+
+        .items-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .items-header i {
+            color: #ff0000;
+        }
+
+        .item-card {
+            background: #f8f9fa;
+            border: 2px solid #f1f3f4;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            border-color: #ff0000;
+            background: white;
+            transform: translateX(5px);
+        }
+
+        .item-icon {
+            width: 50px;
+            height: 50px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .item-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .item-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .item-meta i {
+            color: #ff0000;
+        }
+
+        .item-total {
+            text-align: right;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff0000;
+        }
+
+        .item-unit-price {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .user-greeting {
+                display: block;
+            }
+
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                /* MODIFIED: Adjusted for new header height on mobile */
+                margin-top: 100px;
+                padding: 1rem;
+            }
+        }
+
+        /* Animation for smooth entrance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-card {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>CamFiesta</h1>
+            </div>
+            
+            <div class="nav-desktop">
+                <span class="user-greeting">Hello, {{ user.username }}</span>
+                <a href="{% url 'home' %}"> Home</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'view_cart' %}">Cart</a>
+                <a href="{% url 'search' %}">Search</a>
+            </div>
+
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <nav class="nav-mobile" id="mobileNav">
+            <span class="user-greeting">Hello, {{ user.username }}</span>
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+            <a href="{% url 'profile' %}"><i class="fas fa-user"></i> View Profile</a>
+            <a href="{% url 'view_cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a>
+            <a href="{% url 'search' %}"><i class="fas fa-search"></i> Search</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-history"></i>
+                Order History
+            </h1>
+            <p class="page-subtitle">Track all your camera purchases and order status</p>
+        </div>
+
+        <div class="orders-container">
+            {% if order_details %}
+                {% for order in order_details %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">
+                                <i class="fas fa-receipt"></i>
+                                Order #{{ order.order_id }}
+                            </div>
+                            <div class="order-date">{{ order.order_date }}</div>
+                        </div>
+                        <div class="order-status status-{{ order.status|lower }}">
+                            <i class="fas fa-info-circle"></i>
+                            {{ order.status }}
+                        </div>
+                    </div>
+
+                    <div class="order-body">
+                        <div class="order-summary">
+                            <div class="summary-item">
+                                <i class="fas fa-calendar"></i>
+                                <span><strong>Date:</strong> {{ order.order_date }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fas fa-box"></i>
+                                <span><strong>Items:</strong> {{ order.items|length }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span class="total-price"><strong>Total: ${{ order.total_price }}</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="order-items">
+                            <div class="items-header">
+                                <i class="fas fa-camera"></i>
+                                Ordered Items
+                            </div>
+                            {% for item in order.items %}
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4>{{ item.name }}</h4>
+                                    <div class="item-meta">
+                                        <span><i class="fas fa-cubes"></i> Qty: {{ item.quantity }}</span>
+                                        <span><i class="fas fa-tag"></i> ${{ item.price }} each</span>
+                                    </div>
+                                </div>
+                                <div class="item-total">
+                                    <div class="item-price">${{ item.total_price }}</div>
+                                    <div class="item-unit-price">Total</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>No Orders Yet</h3>
+                    <p>You haven't placed any orders yet. Start shopping to see your order history here!</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer style="background-color: #000000; color: #b0b0b0; text-align: center; padding: 30px 20px; font-family: 'Segoe UI', sans-serif; border-top: 3px solid #ff0000;">
+    <p style="margin: 5px 0; font-size: 15px;">
+        © 2025 CamFiesta. All Rights Reserved.
+    </p>
+    <p style="margin: 5px 0; font-size: 14px;">
+        Your Ultimate Destination for Photography Gear.
+    </p>
+</footer>
+
+    <script>
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileNav = document.getElementById('mobileNav');
+            
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
