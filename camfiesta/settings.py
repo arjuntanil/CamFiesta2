@@ -73,8 +73,15 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# WhiteNoise configuration for Azure
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Chatbot settings
+CHATBOT_DEBUG = os.environ.get('CHATBOT_DEBUG', 'True') == 'True'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

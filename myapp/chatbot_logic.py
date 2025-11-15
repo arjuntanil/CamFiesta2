@@ -18,10 +18,11 @@ def initialize_api():
     global chat
     
     try:
-        if settings.CHATBOT_DEBUG:
+        debug_mode = getattr(settings, 'CHATBOT_DEBUG', True)
+        if debug_mode:
             print("Chatbot Debug: Starting API initialization")
         api_key = os.getenv("GEMINI_API_KEY", "").strip()
-        if settings.CHATBOT_DEBUG:
+        if debug_mode:
             print("Chatbot Debug: Creating Gemini client")
             
         # Add error handling for production
