@@ -11,11 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'camfiesta.production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'camfiesta.settings')
 
 application = get_wsgi_application()
-
-# Add whitenoise middleware for static files
-from whitenoise import WhiteNoise
-application = WhiteNoise(application)
-application.add_files('staticfiles', prefix='static/')

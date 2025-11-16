@@ -116,12 +116,28 @@ WSGI_APPLICATION = 'camfiesta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use PostgreSQL on Azure, SQLite locally
+if os.environ.get('AZURE_POSTGRESQL_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('AZURE_POSTGRESQL_NAME', 'camfiesta-website-database'),
+            'USER': os.environ.get('AZURE_POSTGRESQL_USER'),
+            'PASSWORD': os.environ.get('AZURE_POSTGRESQL_PASSWORD'),
+            'HOST': os.environ.get('AZURE_POSTGRESQL_HOST'),
+            'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require',
+            }
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

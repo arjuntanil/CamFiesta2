@@ -5,6 +5,7 @@ db.sqlite3
 /static
 /media
 /staticfiles
-.vscode/
+.vsco
+de/
 *.log
 local_settings.py
